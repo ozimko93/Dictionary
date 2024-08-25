@@ -1,0 +1,19 @@
+@import './_vars.scss';
+@import './_mixins.scss';
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  width: 100%;
+}
+
+.body {
+  font-family: $font-family;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
