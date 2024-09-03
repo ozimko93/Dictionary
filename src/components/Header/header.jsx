@@ -1,22 +1,22 @@
 import './Header.scss';
 function Header() {
+  const navItems = [
+    { href: '#home', label: 'Главная' },
+    { href: '#words', label: 'Список слов' },
+    { href: '#about', label: 'О нас' },
+    { href: '#contact', label: 'Контакты' },
+  ];
+
   return (
     <header className="header">
       <div className="logo">Лингвинёнок</div>
       <nav className="nav">
         <ul>
-          <li>
-            <a href="#home">Главная</a>
-          </li>
-          <li>
-            <a href="#words">Список слов</a>
-          </li>
-          <li>
-            <a href="#about">О нас</a>
-          </li>
-          <li>
-            <a href="#contact">Контакты</a>
-          </li>
+          {navItems.map((item, index) => (
+            <li key={index}>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))}
         </ul>
       </nav>
     </header>

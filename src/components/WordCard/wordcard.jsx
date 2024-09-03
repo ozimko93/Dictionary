@@ -1,67 +1,102 @@
-import React from 'react';
+import { useState } from 'react';
 import './WordCard.scss';
 
-class WordCard extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isEditing: false,
-    };
-  }
+function WordCard({
+  term,
+  transcription,
+  translation,
+  topic,
+  onUpdate,
+  onDelete,
+}) {
+  const [isTranslationVisible, setIsTranslationVisible] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editValues, setEditValues] = useState({
+    term,
+    transcription,
+    translation,
+    topic,
+  });
 
-  handleEdit = () => {
-    this.setState({ isEditing: true });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditValues({
+      ...editValues,
+      [name]: value,
+    });
   };
 
-  handleSave = () => {
-    const newTerm = document.getElementById('editTerm').value;
-    const newTranscription = document.getElementById('editTranscription').value;
-    const newTranslation = document.getElementById('editTranslation').value;
-    const newTopic = document.getElementById('editTopic').value;
-    this.props.onUpdate(newTerm, newTranscription, newTranslation, newTopic);
-    this.setState({ isEditing: false });
-  };
-
-  handleCancel = () => {
-    this.setState({ isEditing: false });
-  };
-
-  render() {
-    const { term, transcription, translation, topic, onDelete } = this.props;
-    const { isEditing } = this.state;
-
-    return (
-      <div className="word-card">
-        {isEditing ? (
-          <>
-            <input id="editTerm" defaultValue={term} />
-            <input id="editTranscription" defaultValue={transcription} />
-            <input id="editTranslation" defaultValue={translation} />
-            <input id="editTopic" defaultValue={topic} />
-            <button className="btnSave" onClick={this.handleSave}>
-              Сохранить
-            </button>
-            <button className="btnCancel" onClick={this.handleCancel}>
-              Отмена
-            </button>
-          </>
-        ) : (
-          <>
-            <h2>{term}</h2>
-            <p>Транскрипция: {transcription}</p>
-            <p>Перевод: {translation}</p>
-            <p>Тема: {topic}</p>
-            <button className="btnEdit" onClick={this.handleEdit}>
-              Редактировать
-            </button>
-            <button className="btnDelete" onClick={onDelete}>
-              Удалить
-            </button>
-          </>
-        )}
-      </div>
+  const handleSave = () => {
+    onUpdate(
+      editValues.term,
+      editValues.transcription,
+      editValues.translation,
+      editValues.topic
     );
-  }
+    setIsEditing(false);
+  };
+
+  const handleCancel = () => {
+    setEditValues({ term, transcription, translation, topic });
+    setIsEditing(false);
+  };
+
+  const toggleTranslationVisibility = () => {
+    setIsTranslationVisible(!isTranslationVisible);
+  };
+
+  return (
+    <div className="word-card">
+      {isEditing ? (
+        <>
+          <input name="term" value={editValues.term} onChange={handleChange} />
+          <input
+            name="transcription"
+            value={editValues.transcription}
+            onChange={handleChange}
+          />
+          <input
+            name="translation"
+            value={editValues.translation}
+            onChange={handleChange}
+          />
+          <input
+            name="topic"
+            value={editValues.topic}
+            onChange={handleChange}
+          />
+          <button className="btnSave" onClick={handleSave}>
+            Сохранить
+          </button>
+          <button className="btnCancel" onClick={handleCancel}>
+            Отмена
+          </button>
+        </>
+      ) : (
+        <>
+          <h2>{term}</h2>
+          <p>Транскрипция: {transcription}</p>
+          {isTranslationVisible ? (
+            <p>Перевод: {translation}</p>
+          ) : (
+            <button
+              className="btnShowTranslation"
+              onClick={toggleTranslationVisibility}
+            >
+              Показать перевод
+            </button>
+          )}
+          <p>Тема: {topic}</p>
+          <button className="btnEdit" onClick={() => setIsEditing(true)}>
+            Редактировать
+          </button>
+          <button className="btnDelete" onClick={onDelete}>
+            Удалить
+          </button>
+        </>
+      )}
+    </div>
+  );
 }
 
 export default WordCard;

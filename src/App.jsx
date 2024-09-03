@@ -1,10 +1,11 @@
+import { useState } from 'react';
 import './assets/styles/main.scss';
 import Header from './components/Header/header';
 import Footer from './components/Footer/footer';
 import WordCard from './components/WordCard/wordcard';
 
 function App() {
-  const words = [
+  const initialWords = [
     {
       term: 'nice',
       transcription: '[nais]',
@@ -54,6 +55,31 @@ function App() {
       topic: 'Прилагательные',
     },
   ];
+
+  const [words, setWords] = useState(initialWords);
+
+  const updateWord = (
+    index,
+    newTerm,
+    newTranscription,
+    newTranslation,
+    newTopic
+  ) => {
+    const updatedWords = [...words];
+    updatedWords[index] = {
+      term: newTerm,
+      transcription: newTranscription,
+      translation: newTranslation,
+      topic: newTopic,
+    };
+    setWords(updatedWords);
+  };
+
+  const deleteWord = (index) => {
+    const updatedWords = words.filter((_, i) => i !== index);
+    setWords(updatedWords);
+  };
+
   return (
     <>
       <Header />
@@ -65,6 +91,16 @@ function App() {
             transcription={word.transcription}
             translation={word.translation}
             topic={word.topic}
+            onUpdate={(newTerm, newTranscription, newTranslation, newTopic) =>
+              updateWord(
+                index,
+                newTerm,
+                newTranscription,
+                newTranslation,
+                newTopic
+              )
+            }
+            onDelete={() => deleteWord(index)}
           />
         ))}
       </div>
