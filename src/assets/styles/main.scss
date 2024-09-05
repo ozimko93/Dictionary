@@ -8,12 +8,49 @@
   text-align: center;
   width: 100%;
 }
-
 .body {
+  flex: 1;
+}
+
+.card-list {
   font-family: $font-family;
   margin: 0;
   padding: 0;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+}
+.view-mode {
+  background-color: #f5d7e5;
+  font-size: 18px;
+  padding: 0;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 8px;
+  border: 1px solid #eef5ff;
+  height: 40px;
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
+  }
+}
+.view-mode.blink {
+  animation: blink 2s ease-in-out infinite;
+}
+@keyframes blink {
+  0% {
+    background-color: #b3e0ff;
+  }
+  25% {
+    background-color: #8fd9f7;
+  }
+  50% {
+    background-color: #a0e3b1;
+  }
+  75% {
+    background-color: #8fd9f7;
+  }
+  100% {
+    background-color: #b3e0ff;
+  }
 }

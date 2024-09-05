@@ -8,7 +8,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 60px;
+  height: 63px;
+  flex-shrink: 0;
 
   .logo {
     width: 20%;
