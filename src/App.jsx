@@ -1,9 +1,90 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './assets/styles/main.scss';
 import Header from './components/Header/header';
 import Footer from './components/Footer/footer';
 import WordCard from './components/WordCard/WordCard';
 import WordGallery from './components/WordGallery/WordGallery';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+  useLocation,
+} from 'react-router-dom';
+
+const MainContent = ({ words, updateWord, deleteWord }) => {
+  const [isGallery, setIsGallery] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === '/game') {
+      setIsGallery(true);
+    } else {
+      setIsGallery(false);
+    }
+  }, [location.pathname]);
+
+  const toggleViewMode = () => {
+    if (isGallery) {
+      navigate('/');
+    } else {
+      navigate('/game');
+    }
+  };
+
+  return (
+    <div className="body">
+      <button className="view-mode blink" onClick={toggleViewMode}>
+        {isGallery ? 'Показать все карточки' : 'Переключить на галерею'}
+      </button>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <div className="card-list">
+              {words.map((word, index) => (
+                <WordCard
+                  key={index}
+                  term={word.term}
+                  transcription={word.transcription}
+                  translation={word.translation}
+                  topic={word.topic}
+                  onUpdate={(
+                    newTerm,
+                    newTranscription,
+                    newTranslation,
+                    newTopic
+                  ) =>
+                    updateWord(
+                      index,
+                      newTerm,
+                      newTranscription,
+                      newTranslation,
+                      newTopic
+                    )
+                  }
+                  onDelete={() => deleteWord(index)}
+                />
+              ))}
+            </div>
+          }
+        />
+        <Route
+          path="/game"
+          element={
+            <WordGallery
+              words={words}
+              initialIndex={0}
+              onUpdate={updateWord}
+              onDelete={deleteWord}
+            />
+          }
+        />
+      </Routes>
+    </div>
+  );
+};
 
 function App() {
   const initialWords = [
@@ -55,11 +136,81 @@ function App() {
       translation: 'активный',
       topic: 'Прилагательные',
     },
+    {
+      term: 'beautiful',
+      transcription: '[ˈbjuːtɪfl]',
+      translation: 'красивый',
+      topic: 'Прилагательные',
+    },
+    {
+      term: 'friendship',
+      transcription: '[ˈfrɛndʃɪp]',
+      translation: 'дружба',
+      topic: 'Существительные',
+    },
+    {
+      term: 'run',
+      transcription: '[rʌn]',
+      translation: 'бежать',
+      topic: 'Глаголы',
+    },
+    {
+      term: 'forest',
+      transcription: '[ˈfɔːrɪst]',
+      translation: 'лес',
+      topic: 'Природа',
+    },
+    {
+      term: 'banana',
+      transcription: '[bəˈnænə]',
+      translation: 'банан',
+      topic: 'Фрукты',
+    },
+    {
+      term: 'improve',
+      transcription: '[ɪmˈpruːv]',
+      translation: 'улучшать',
+      topic: 'Глаголы',
+    },
+    {
+      term: 'strength',
+      transcription: '[strɛŋθ]',
+      translation: 'сила',
+      topic: 'Существительные',
+    },
+    {
+      term: 'intelligent',
+      transcription: '[ɪnˈtɛlɪdʒənt]',
+      translation: 'умный',
+      topic: 'Прилагательные',
+    },
+    {
+      term: 'joy',
+      transcription: '[dʒɔɪ]',
+      translation: 'радость',
+      topic: 'Существительные',
+    },
+    {
+      term: 'swim',
+      transcription: '[swɪm]',
+      translation: 'плавать',
+      topic: 'Глаголы',
+    },
+    {
+      term: 'ocean',
+      transcription: '[ˈoʊʃən]',
+      translation: 'океан',
+      topic: 'Природа',
+    },
+    {
+      term: 'apple',
+      transcription: '[ˈæpl]',
+      translation: 'яблоко',
+      topic: 'Фрукты',
+    },
   ];
 
   const [words, setWords] = useState(initialWords);
-  const [isGallery, setIsGallery] = useState(false);
-
   const updateWord = (
     index,
     newTerm,
@@ -81,55 +232,19 @@ function App() {
     const updatedWords = words.filter((_, i) => i !== index);
     setWords(updatedWords);
   };
-  const toggleViewMode = () => {
-    setIsGallery((prevMode) => !prevMode);
-  };
 
   return (
-    <>
-      <Header />
-      <div className="body">
-        <button className="view-mode blinkgit " onClick={toggleViewMode}>
-          {isGallery ? 'Показать все карточки' : 'Переключить на галерею'}
-        </button>
-        {isGallery ? (
-          <WordGallery
-            words={words}
-            initialIndex={0}
-            onUpdate={updateWord}
-            onDelete={deleteWord}
-          />
-        ) : (
-          <div className="card-list">
-            {words.map((word, index) => (
-              <WordCard
-                key={index}
-                term={word.term}
-                transcription={word.transcription}
-                translation={word.translation}
-                topic={word.topic}
-                onUpdate={(
-                  newTerm,
-                  newTranscription,
-                  newTranslation,
-                  newTopic
-                ) =>
-                  updateWord(
-                    index,
-                    newTerm,
-                    newTranscription,
-                    newTranslation,
-                    newTopic
-                  )
-                }
-                onDelete={() => deleteWord(index)}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-      <Footer />
-    </>
+    <Router>
+      <>
+        <Header />
+        <MainContent
+          words={words}
+          updateWord={updateWord}
+          deleteWord={deleteWord}
+        />
+        <Footer />
+      </>
+    </Router>
   );
 }
 

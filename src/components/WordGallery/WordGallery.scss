@@ -30,4 +30,10 @@
   &:focus {
     outline: none;
   }
+  &:disabled {
+    background: linear-gradient(135deg, #799cca, #515151);
+    color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+  }
 }

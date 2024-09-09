@@ -2,7 +2,7 @@ import './Footer.scss';
 function Footer() {
   return (
     <footer>
-      <p>© 2024 Лингвинёнок</p>
+      <p>© 2024 Lingua</p>
     </footer>
   );
 }

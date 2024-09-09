@@ -4,9 +4,13 @@
 .header {
   background-color: $primary-color;
   color: $text-color;
-  padding: 15px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 10px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 600px;
   align-items: center;
   height: 63px;
   flex-shrink: 0;
@@ -14,9 +18,13 @@
   .logo {
     width: 20%;
   }
+  .logo-image {
+    width: 110px;
+    border-radius: 8px;
+  }
 
   nav {
-    width: 60%;
+    width: 30%;
 
     ul {
       list-style: none;

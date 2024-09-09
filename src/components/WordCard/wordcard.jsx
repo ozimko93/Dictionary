@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './WordCard.scss';
 
 function WordCard({
@@ -8,15 +8,22 @@ function WordCard({
   topic,
   onUpdate,
   onDelete,
+  showTranslation,
+  setShowTranslation,
+  setIsEditing,
+  isEditing,
 }) {
-  const [isTranslationVisible, setIsTranslationVisible] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
   const [editValues, setEditValues] = useState({
     term,
     transcription,
     translation,
     topic,
   });
+
+  useEffect(() => {
+    // Обновляем значения при изменении пропсов
+    setEditValues({ term, transcription, translation, topic });
+  }, [term, transcription, translation, topic]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,7 +49,9 @@ function WordCard({
   };
 
   const toggleTranslationVisibility = () => {
-    setIsTranslationVisible(!isTranslationVisible);
+    if (!isEditing) {
+      setShowTranslation((prev) => !prev);
+    }
   };
 
   return (
@@ -76,7 +85,7 @@ function WordCard({
         <>
           <h2>{term}</h2>
           <p>Транскрипция: {transcription}</p>
-          {isTranslationVisible ? (
+          {showTranslation || isEditing ? (
             <p>Перевод: {translation}</p>
           ) : (
             <button
